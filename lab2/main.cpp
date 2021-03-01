@@ -216,6 +216,19 @@ char nn (float *i_img, float *w_conv1, float *w_conv2, float *w_fc1, float *w_fc
 
   return ret;
 } //}}}
+int output_gpio17(int num){
+  GPIO outGPIO(17);    							// pin 11 setting
+  outGPIO.setDirection(OUTPUT);    	// basic output example
+  outGPIO.setValue(LOW);
+  for (num; num > 0; num--){        	// flash the LED 10 times
+      outGPIO.setValue(HIGH);       	// turn the LED on
+      usleep(500000);               	// sleep for 0.5 seconds
+      outGPIO.setValue(LOW);        	// turn the LED off
+      usleep(500000);               	// sleep for 0.5 seconds
+   }
+
+  return 0;
+}
 
 int main() { //{{{
   char pred;
@@ -257,6 +270,9 @@ int main() { //{{{
 
   pred = nn(buf_f, w_conv1, w_conv2, w_fc1, w_fc2);
   printf("predicted number is %d\n", (int)pred);
+  printf("Output to GPIO17");
+  output_gpio17((int) pred);
+
 
   // buffer free
   free(buf);
