@@ -9,6 +9,8 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
+#include <iostream>
+#include <unistd.h>   
 #include "GPIO.h"
  
 #define countof(ARRAY) (sizeof(ARRAY) / sizeof*(ARRAY))
