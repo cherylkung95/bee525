@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/lab2.dir/GPIO.cpp.o CMakeFiles/lab2.dir/main.cpp.o  -o lab2 -lpthread 
