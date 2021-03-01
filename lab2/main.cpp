@@ -275,7 +275,7 @@ int main() { //{{{
 
   pred = nn(buf_f, w_conv1, w_conv2, w_fc1, w_fc2);
   printf("predicted number is %d\n", (int)pred);
-  printf("Output to GPIO17");
+  printf("Output to GPIO17\n");
   output_gpio17((int) pred);
 
 
