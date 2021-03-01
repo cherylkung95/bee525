@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(lab2)
 include_directories(include)
-file(GLOB SOURCES "./*.cpp")
+file(GLOB SOURCES "./*.cpp" "./*h")
+find_package ( Threads )
 add_executable(lab2 ${SOURCES})
+target_link_libraries ( lab2 ${CMAKE_THREAD_LIBS_INIT} )
