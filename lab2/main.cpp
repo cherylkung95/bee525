@@ -14,6 +14,9 @@
 #define countof(ARRAY) (sizeof(ARRAY) / sizeof*(ARRAY))
 #define DOWNTOPBMP 1
 
+using namespace exploringRPi;
+using namespace std;
+
 void read_img (unsigned char *o_buf) { //{{{
   FILE* f = fopen("../image.bmp", "rb");
   unsigned char header[54];
