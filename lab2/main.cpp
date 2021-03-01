@@ -9,7 +9,7 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
-#include <GPIO.h>
+#include "GPIO.h"
  
 #define countof(ARRAY) (sizeof(ARRAY) / sizeof*(ARRAY))
 #define DOWNTOPBMP 1
