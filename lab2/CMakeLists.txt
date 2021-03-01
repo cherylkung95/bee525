@@ -1,3 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(rpi_cam_ml)
-add_executable(rpi_cam_ml main.cpp GPIO.h GPIO.cpp)
+project(lab2)
+include_directories(include)
+file(GLOB SOURCES "src/*.cpp)
+add_executable(lab2 ${SOURCES})
