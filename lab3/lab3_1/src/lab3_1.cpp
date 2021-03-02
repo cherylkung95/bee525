@@ -7,8 +7,8 @@ using namespace seal;
   
 unsigned char header[54];
 
-void read_img (unsigned char *o_buf) { //{{{
-  FILE* fr = fopen("../../test_images/test_image0.bmp", "rb");
+void read_img (unsigned char *o_buf, str filename) { //{{{
+  FILE* fr = fopen(filename, "rb");
   unsigned char i_buf[3*28*28];
   int tmpI;
   size_t result;
@@ -59,7 +59,7 @@ void write_img (unsigned char *i_buf) { //{{{
 int main(void) {
   // image reading
   unsigned char plaintext_buf [28*28];
-  read_img(plaintext_buf);
+  read_img(plaintext_buf, "../../test_images/test_image0.bmp");
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used
