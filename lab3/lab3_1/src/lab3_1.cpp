@@ -59,7 +59,7 @@ void write_img (unsigned char *i_buf) { //{{{
 int main(void) {
   // image reading
   unsigned char plaintext_buf [28*28];
-  read_img(plaintext_buf, "../../test_images/test_image0.bmp");
+  read_img(plaintext_buf, "../../test_images/cat.bmp");
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used
