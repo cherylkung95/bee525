@@ -7,7 +7,7 @@ using namespace seal;
   
 unsigned char header[54];
 
-void read_img (unsigned char *o_buf, str filename) { //{{{
+void read_img (unsigned char *o_buf, const char* filename) { //{{{
   FILE* fr = fopen(filename, "rb");
   unsigned char i_buf[3*28*28];
   int tmpI;
