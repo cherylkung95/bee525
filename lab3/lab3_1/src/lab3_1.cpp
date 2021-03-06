@@ -59,7 +59,9 @@ void write_img (unsigned char *i_buf) { //{{{
 int main(void) {
   // image reading
   unsigned char plaintext_buf [28*28];
-  read_img(plaintext_buf, "../../test_images/cat.bmp");
+  unsigned char plaintext_buf1[28*28];
+  read_img(plaintext_buf, "../../test_images/cat.bmp"); //change back to "../../test_images/cat.bmp"
+  read_img(plaintext_buf1, "../../test_images/hat.bmp");//change back to "../../test_images/hat.bmp"
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used
@@ -95,11 +97,15 @@ int main(void) {
   Plaintext p0;
   encoder.encode(input0, scale, p0); // encoding
 
-  // encoding for data1 (constant 255)
+  // encoding for data2 (input image 1)
   vector<double> input1;
   input1.reserve(slot_count);
-  for (size_t i=0; i<slot_count; i++) {
-    input1.push_back(1.0); // 1.0 = 255 / maximum_pixel_value
+  for (size_t i = 0; i < slot_count; i++) {
+      double norm_pxl = 0.0;
+      if (i < 28 * 28) { // use 28x28 slots out of 4K slots
+          norm_pxl = (double)plaintext_buf1[i] / 255;
+      }
+      input1.push_back(norm_pxl); // put 28x28 pixels into th input1 vector
   }
   Plaintext p1;
   encoder.encode(input1, scale, p1); // encoding
@@ -112,7 +118,7 @@ int main(void) {
 
   // homomorphic evaluation (Enc(255) - Enc(pixel values))
   Ciphertext cR;
-  evaluator.sub(c1, c0, cR);
+  evaluator.add(c1, c0, cR);
 
   // decryption and decoding
   Plaintext pR;
