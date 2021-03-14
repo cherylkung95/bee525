@@ -1,0 +1,59 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "lab3_2",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "lab3_2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-lab3_2-Debug-7f41f37091443087239e.json",
+					"name" : "lab3_2",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/chery/OneDrive/Documents/UW Bothell MSEE/Embedded System Design/Lab 2/bee525/lab3/lab3_2/out/build/x64-Debug",
+		"source" : "C:/Users/chery/OneDrive/Documents/UW Bothell MSEE/Embedded System Design/Lab 2/bee525/lab3/lab3_2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}
