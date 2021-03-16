@@ -1,4 +1,5 @@
 #include "examples.h"
+#include <cmath>
 
 using namespace std;
 using namespace seal;
@@ -60,8 +61,8 @@ int main(void) {
   // image reading
   unsigned char plaintext_buf [28*28];
   unsigned char plaintext_buf1[28*28];
-  read_img(plaintext_buf, "../../image0.bmp"); //change back to "../../test_images/cat.bmp"
-  read_img(plaintext_buf1, "../../image1.bmp");//change back to "../../test_images/hat.bmp"
+  read_img(plaintext_buf, "../../../image0.bmp"); //change back to "../../test_images/cat.bmp"
+  read_img(plaintext_buf1, "../../../image1.bmp");//change back to "../../test_images/hat.bmp"
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used
@@ -76,6 +77,8 @@ int main(void) {
   auto secret_key = keygen.secret_key(); // secret key generation 
   PublicKey public_key; 
   keygen.create_public_key(public_key); // public key generation
+  RelinKeys relin_keys;
+  keygen.create_relin_keys(relin_keys);
   
   // encryptor, evaluator, and decryptor setting
   Encryptor encryptor(context, public_key);
@@ -110,26 +113,49 @@ int main(void) {
   Plaintext p1;
   encoder.encode(input1, scale, p1); // encoding
 
+  vector<double> input2;
+  input2.reserve(slot_count);
+  for (size_t i = 0; i < slot_count; i++) {
+      double norm_pxl = 0.0;
+      if (i < 28 * 28) { // use 28x28 slots out of 4K slots
+          norm_pxl = 255 / ((double)plaintext_buf[i] + 1.0);
+      }
+      input2.push_back(norm_pxl); // put 28x28 pixels into th input0 vector
+  }
+  Plaintext p2;
+  encoder.encode(input2, scale, p2); // encoding
+
+  //Encode scalar
+  Plaintext p3;
+  encoder.encode(255, scale, p3); // encoding
+
   // encryption of the two plaintext polynomials
   Ciphertext c0;
   Ciphertext c1;
+  Ciphertext c2;
   encryptor.encrypt(p0, c0);
   encryptor.encrypt(p1, c1);
+  encryptor.encrypt(p2, c2);
 
-  // homomorphic evaluation (Enc(255) - Enc(pixel values))
+  // homomorphic evaluation (Enc(image1) - Enc(image0))
   Ciphertext cR;
   evaluator.sub(c1, c0, cR);
 
+  // homomorphic evaluation (Enc(resImage) * Enc(1/(image0+1)))
+  Ciphertext cR1;
+  evaluator.multiply(cR, c2, cR1);
+  evaluator.relinearize_inplace(cR1, relin_keys);
+
   // decryption and decoding
   Plaintext pR;
-  decryptor.decrypt(cR, pR);
+  decryptor.decrypt(cR1, pR);
   vector<double> result;
   encoder.decode(pR, result);
 
   // writing the result image
   reverse(result.begin(), result.end());
   for (int i=0; i<28*28; i++) {
-    plaintext_buf[28*28-i-1] = 255*result.back(); // vector::back(): extracts an element from the vector
+    plaintext_buf[28*28-i-1] = (unsigned char) abs(255*result.back()); // vector::back(): extracts an element from the vector
     result.pop_back(); // vector::pop_back(): removes the element from the vector
   }
   write_img(plaintext_buf);
