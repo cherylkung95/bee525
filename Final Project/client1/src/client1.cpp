@@ -58,32 +58,41 @@ void write_img (unsigned char *i_buf) { //{{{
 } //}}}
 
 int main(void) {
+// prepare to write files
+  ofstream of_parms;
+  ofstream of_sk;
+  ofstream of_rk;
+  ofstream of_cipher_client;
+  of_parms.open("../../../../network/parms.bin", ios_base::out | ios_base::binary);
+  of_sk.open("../../../../network/sk.bin", ios_base::out | ios_base::binary);
+  of_rk.open("../../../../network/rk.bin", ios_base::out | ios_base::binary);
+  of_cipher_client.open("../../../../network/cipherI.bin", ios_base::out | ios_base::binary);
+
   // image reading
-  unsigned char plaintext_buf [28*28];
+  unsigned char plaintext_buf[28*28];
   unsigned char plaintext_buf1[28*28];
-  read_img(plaintext_buf, "../../../image0.bmp"); //change back to "../../test_images/cat.bmp"
-  read_img(plaintext_buf1, "../../../image1.bmp");//change back to "../../test_images/hat.bmp"
+  read_img(plaintext_buf, "../../../image0.bmp"); 
+  read_img(plaintext_buf1, "../../../image1.bmp");
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used
   size_t poly_modulus_degree = 8192; // 4K slots are available
   parms.set_poly_modulus_degree(poly_modulus_degree);
   parms.set_coeff_modulus(CoeffModulus::Create(poly_modulus_degree, { 60, 40, 40, 60 })); // less than 4 multiplications
+  auto parms_size = parms.save(of_parms);
+
   double scale = pow(2.0, 40);
   SEALContext context(parms);
 
   // key generation
   KeyGenerator keygen(context);
   auto secret_key = keygen.secret_key(); // secret key generation 
+  secret_key.save(of_sk);
   PublicKey public_key; 
   keygen.create_public_key(public_key); // public key generation
   RelinKeys relin_keys;
   keygen.create_relin_keys(relin_keys);
-  
-  // encryptor, evaluator, and decryptor setting
-  Encryptor encryptor(context, public_key);
-  Evaluator evaluator(context);
-  Decryptor decryptor(context, secret_key);
+  relin_keys.save(of_rk);
 
   // encoding for data0 (input image)
   CKKSEncoder encoder(context);
@@ -125,36 +134,17 @@ int main(void) {
   Plaintext p2;
   encoder.encode(input2, scale, p2); // encoding
 
-  // encryption of the two plaintext polynomials
-  Ciphertext c0;
-  Ciphertext c1;
-  Ciphertext c2;
-  encryptor.encrypt(p0, c0);
-  encryptor.encrypt(p1, c1);
-  encryptor.encrypt(p2, c2);
+  // encrypt the two plaintext polynomials
+  Encryptor encryptor(context, public_key);
+  auto size_c0 = encryptor.encrypt(p0).save(of_cipher_client);
+  auto size_c1 = encryptor.encrypt(p1).save(of_cipher_client);
+  auto size_c2 = encryptor.encrypt(p2).save(of_cipher_client);
 
-  // homomorphic evaluation (Enc(image1) - Enc(image0))
-  Ciphertext cR;
-  evaluator.sub(c1, c0, cR);
-
-  // homomorphic evaluation (Enc(resImage) * Enc(1/(image0+1)))
-  Ciphertext cR1;
-  evaluator.multiply(cR, c2, cR1);
-  evaluator.relinearize_inplace(cR1, relin_keys);
-
-  // decryption and decoding
-  Plaintext pR;
-  decryptor.decrypt(cR1, pR);
-  vector<double> result;
-  encoder.decode(pR, result);
-
-  // writing the result image
-  reverse(result.begin(), result.end());
-  for (int i=0; i<28*28; i++) {
-    plaintext_buf[28*28-i-1] = (unsigned char) abs(255*result.back()); // vector::back(): extracts an element from the vector
-    result.pop_back(); // vector::pop_back(): removes the element from the vector
-  }
-  write_img(plaintext_buf);
+  // close the ofstream
+  of_parms.close();
+  of_sk.close();
+  of_rk.close();
+  of_cipher_client.close();
 
   return 0;
 }
