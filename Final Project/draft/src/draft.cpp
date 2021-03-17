@@ -61,8 +61,8 @@ int main(void) {
   // image reading
   unsigned char plaintext_buf [28*28];
   unsigned char plaintext_buf1[28*28];
-  read_img(plaintext_buf, "../../../image0.bmp"); //change back to "../../test_images/cat.bmp"
-  read_img(plaintext_buf1, "../../../image1.bmp");//change back to "../../test_images/hat.bmp"
+  read_img(plaintext_buf, "../image0.bmp"); //change back to "../../test_images/cat.bmp"
+  read_img(plaintext_buf1, "../image1.bmp");//change back to "../../test_images/hat.bmp"
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used

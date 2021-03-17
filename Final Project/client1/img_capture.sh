@@ -1,4 +1,4 @@
 rm -rf *.bmp
-raspistill --encoding bmp -o image0.bmp -w 32 -h 32
-timeout /t 10 /nobreak
-raspistill --encoding bmp -o image1.bmp -w 32 -h 32
+raspistill --encoding bmp -o image0.bmp -w 28 -h 28
+sleep 1
+raspistill --encoding bmp -o image1.bmp -w 28 -h 28

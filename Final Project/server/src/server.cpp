@@ -11,10 +11,10 @@ int main(void) {
     ifstream if_relin_keys;
     ofstream of_cipher_server;
 
-    if_parms_server.open("./parms.bin", ios::binary); //"/../../../../network/parms.bin"
-    if_cipher_server.open("./cipherI.bin", ios::binary); //"/../../../../network/cipherI.bin"
-    if_relin_keys.open("./rk.bin", ios::binary); //"/../../../../network/rk.bin"
-    of_cipher_server.open("../../../../network/cipherR.bin", ios_base::out | ios::binary);
+    if_parms_server.open("../../network/parms.bin", ios::binary); //"/../../../../network/parms.bin"
+    if_cipher_server.open("../../network/cipherI.bin", ios::binary); //"/../../../../network/cipherI.bin"
+    if_relin_keys.open("../../network/rk.bin", ios::binary); //"/../../../../network/rk.bin"
+    of_cipher_server.open("cipherR.bin", ios_base::out | ios::binary);
 
     if (if_parms_server.bad())
     {
@@ -26,7 +26,8 @@ int main(void) {
     parms_server.load(if_parms_server);
 
     SEALContext context_server(parms_server);
-    Ciphertext c0, c1, c2, cR, cR1;
+    Ciphertext c0, c1, c2;
+    Ciphertext cR, cR1;
     c0.load(context_server, if_cipher_server);
     c1.load(context_server, if_cipher_server);
     c2.load(context_server, if_cipher_server);
@@ -40,7 +41,7 @@ int main(void) {
     // homomorphic evaluation (Enc(resImage) * Enc(1/(image0+1)))
     evaluator.multiply(cR, c2, cR1);
     evaluator.relinearize_inplace(cR1, relin_keys);
-    auto size_cR_server = cR.save(of_cipher_server);
+    auto size_cR_server = cR1.save(of_cipher_server);
 
     if_parms_server.close();
     if_cipher_server.close();

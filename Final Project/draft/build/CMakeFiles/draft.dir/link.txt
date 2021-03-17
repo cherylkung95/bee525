@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/draft.dir/src/draft.cpp.o  -o draft  /usr/local/lib/libseal-3.6.a -pthread 

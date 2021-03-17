@@ -63,16 +63,16 @@ int main(void) {
   ofstream of_sk;
   ofstream of_rk;
   ofstream of_cipher_client;
-  of_parms.open("../../../../network/parms.bin", ios_base::out | ios_base::binary);
-  of_sk.open("../../../../network/sk.bin", ios_base::out | ios_base::binary);
-  of_rk.open("../../../../network/rk.bin", ios_base::out | ios_base::binary);
-  of_cipher_client.open("../../../../network/cipherI.bin", ios_base::out | ios_base::binary);
+  of_parms.open("parms.bin", ios_base::out | ios_base::binary);
+  of_sk.open("sk.bin", ios_base::out | ios_base::binary);
+  of_rk.open("rk.bin", ios_base::out | ios_base::binary);
+  of_cipher_client.open("cipherI.bin", ios_base::out | ios_base::binary);
 
   // image reading
   unsigned char plaintext_buf[28*28];
   unsigned char plaintext_buf1[28*28];
-  read_img(plaintext_buf, "../../../image0.bmp"); 
-  read_img(plaintext_buf1, "../../../image1.bmp");
+  read_img(plaintext_buf, "../image0.bmp"); 
+  read_img(plaintext_buf1, "../image1.bmp");
   
   // parameter setting
   EncryptionParameters parms(scheme_type::ckks); // the CKKS homomorphic encryption scheme is used
@@ -134,7 +134,7 @@ int main(void) {
   Plaintext p2;
   encoder.encode(input2, scale, p2); // encoding
 
-  // encrypt the two plaintext polynomials
+  // encrypt the three plaintext polynomials
   Encryptor encryptor(context, public_key);
   auto size_c0 = encryptor.encrypt(p0).save(of_cipher_client);
   auto size_c1 = encryptor.encrypt(p1).save(of_cipher_client);

@@ -1,0 +1,3 @@
+/home/pi/ck_code/bee525/Final Project/client1/build/CMakeFiles/rebuild_cache.dir
+/home/pi/ck_code/bee525/Final Project/client1/build/CMakeFiles/client1.dir
+/home/pi/ck_code/bee525/Final Project/client1/build/CMakeFiles/edit_cache.dir

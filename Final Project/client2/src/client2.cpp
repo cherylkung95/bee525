@@ -40,9 +40,9 @@ int main(void) {
     ifstream if_sk_client2;
     ifstream if_cipher_client2;
 
-    if_parms_client2.open("./parms.bin", ios::binary);
-    if_sk_client2.open("./sk.bin", ios::binary);
-    if_cipher_client2.open("./cipherR.bin", ios::binary);
+    if_parms_client2.open("../../network/parms.bin", ios::binary);
+    if_sk_client2.open("../../network/sk.bin", ios::binary);
+    if_cipher_client2.open("../../network/cipherR.bin", ios::binary);
 
     if (if_parms_client2.bad())
     {

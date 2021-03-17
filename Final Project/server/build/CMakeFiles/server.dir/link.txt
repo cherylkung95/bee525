@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/server.dir/src/server.cpp.o  -o server  /usr/local/lib/libseal-3.6.a -pthread 
