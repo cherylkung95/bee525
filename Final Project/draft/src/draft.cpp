@@ -125,10 +125,6 @@ int main(void) {
   Plaintext p2;
   encoder.encode(input2, scale, p2); // encoding
 
-  //Encode scalar
-  Plaintext p3;
-  encoder.encode(255, scale, p3); // encoding
-
   // encryption of the two plaintext polynomials
   Ciphertext c0;
   Ciphertext c1;
