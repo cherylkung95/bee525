@@ -63,10 +63,10 @@ int main(void) {
   ofstream of_sk;
   ofstream of_rk;
   ofstream of_cipher_client;
-  of_parms.open("parms.bin");
-  of_sk.open("sk.bin");
-  of_rk.open("rk.bin");
-  of_cipher_client.open("cipherI.bin");
+  of_parms.open("../../../../network/parms.bin", ios_base::out | ios_base::binary);
+  of_sk.open("../../../../network/sk.bin", ios_base::out | ios_base::binary);
+  of_rk.open("../../../../network/rk.bin", ios_base::out | ios_base::binary);
+  of_cipher_client.open("../../../../network/cipherI.bin", ios_base::out | ios_base::binary);
 
   // image reading
   unsigned char plaintext_buf[28*28];
